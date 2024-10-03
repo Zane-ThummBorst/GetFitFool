@@ -78,7 +78,7 @@ If everything is set up properly, You should be all set! Be warned, most of the 
 ![image](https://github.com/user-attachments/assets/c45d2378-d413-4e8a-962e-d94019a472b6)
 
 
-Again, a lot of Quality of life has been neglected since the core features are still being developed, so expect issues, errors, and hiccups!
+# Again, a lot of Quality of life has been neglected since the core features are still being developed, so expect issues, errors, and hiccups!
 
 Right now the main flow for creating a saving a routine is as follows:
 
@@ -89,6 +89,10 @@ navigate to the create routine and add in some basic details
 go to your personal routines and select the routine you just created
 
 Start adding in some exercises and save your routine!
+
+# Where's this going?
+
+The last major component of this project is the ability to like, share, and clone routines. The main premise is for this to be an easy access for seeing how other people structure their workouts and allowing an easy way to copy or tweak to your own preferences.
 
 
 
