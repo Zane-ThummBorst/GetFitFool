@@ -79,3 +79,19 @@ If everything is set up properly, You should be all set! Be warned, most of the 
 
 
 Again, a lot of Quality of life has been neglected since the core features are still being developed, so expect issues, errors, and hiccups!
+
+Right now the main flow for creating a saving a routine is as follows:
+
+Create an account using the register form
+
+navigate to the create routine and add in some basic details
+
+go to your personal routines and select the routine you just created
+
+Start adding in some exercises and save your routine!
+
+
+
+
+
+
