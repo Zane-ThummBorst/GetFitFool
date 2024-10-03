@@ -20,6 +20,19 @@
  to set up scripts, first add in a .env file. The content should be as follows:
 
  ```
+ MONGO_URI= *YOUR MONGO CONNECTION STRING*
+ ```
 
+Also, remember to initialize before running any files in terminal:
+
+ ```
+ cd ./scripts
+ npm i
+ ```
+
+ Once you've intialized scripts and added your .env file, running the following line in the scripts directory will populate your database with exercise data:
+
+ ```
+ node index.js
  ```
 
