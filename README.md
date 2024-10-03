@@ -96,7 +96,7 @@ The last major component of this project is the ability to like, share, and clon
 
 # Is this the end of the README?
 
-Yeah I don't have much else to right for now, hopefully the setup was clear and thank you for taking the time to read!
+Yeah I don't have much else to write for now, hopefully the setup was clear and thank you for taking the time to read!
 
 
 
