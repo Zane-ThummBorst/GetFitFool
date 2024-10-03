@@ -92,7 +92,11 @@ Start adding in some exercises and save your routine!
 
 # Where's this going?
 
-The last major component of this project is the ability to like, share, and clone routines. The main premise is for this to be an easy access for seeing how other people structure their workouts and allowing an easy way to copy or tweak to your own preferences.
+The last major component of this project is the ability to like, share, and clone routines. The main premise is for this to be an easy access for seeing how other people structure their workouts and allowing an easy way to copy or tweak to your own preferences. There's also plenty of clean up and styling that needs to be done!
+
+# Is this the end of the README?
+
+Yeah I don't have much else to right for now, hopefully the setup was clear and thank you for taking the time to read!
 
 
 
