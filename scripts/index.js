@@ -3,9 +3,10 @@ const axios = require('axios');
 const fs = require('fs');
 const { readdirSync } = fs;
 let exerciseList = [];
+require('dotenv').config();
 
 const {MongoClient} = require('mongodb');
-const client = new MongoClient("mongodb://127.0.0.1:27017/GDead", { monitorCommands: true })
+const client = new MongoClient(process.env.MONGO_URI, { monitorCommands: true })
 client.connect()
 
 
@@ -53,7 +54,7 @@ const main = async() =>{
     await getExercise(list[i])
   }
 
-
+  throw new Error("This is just to end the script, exercises should be populated");
 }
 
 
