@@ -9,7 +9,9 @@ const jwt = require("jsonwebtoken");
 const Authorization = require('../middleware/Authorization')
 require("dotenv").config();
 const saltRounds = 10;
-const client = new MongoClient("mongodb://127.0.0.1:27017/GDead", { monitorCommands: true })
+
+
+const client = new MongoClient(process.env.MONGO_URI, { monitorCommands: true })
 client.connect()
 
 
