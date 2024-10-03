@@ -66,3 +66,15 @@ Also, remember to initialize before running any files in terminal:
  ```
 
  If your server is running on port 4000, then you would set the above to "http://localhost:4000"
+
+ Once the .env is set up, you can initialize the project with npm i and use the following command to run the client:
+
+ ```
+ npm start
+ ```
+
+If everything is set up properly, You should be all set! Be warned, most of the application is left unfinished and is a WIP. As of writing this readme you have the option of searching for exercises and creating/editing your own routines with some details. The main page looks like this:
+
+![image](https://github.com/user-attachments/assets/c45d2378-d413-4e8a-962e-d94019a472b6)
+
+
