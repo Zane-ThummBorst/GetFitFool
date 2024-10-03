@@ -36,3 +36,33 @@ Also, remember to initialize before running any files in terminal:
  node index.js
  ```
 
+ Now lets move on to setting up the server. first navigate to the server directory.
+
+ ```
+ cd ../server
+ ```
+
+ Then, like scripts, we are going to need to set up a .env file for server to use. This one will contain a little bit more information:
+
+ ```
+ COLLECTION_URI=Routines
+ SECRET_KEY= *YOUR SECRET KEY*
+ MONGO_URI= *YOUR CONNECTION STRING*
+ ORIGIN= *YOUR FRONTEND ORIGIN URL (NECESSARY FOR CORS)*
+ PORT= *YOUR PORT NUMBER YOU WISH TO RUN THE SERVER ON*
+ ```
+
+ Most of the information above you'll need to choose on yourself, but in summary: your secret key is used for signing JWT's and can be anything you want it to be, origin will be whatever your root url is for the frontend ex. https://localhost::3000, and Port is which ever port number you wish the application to run on ex. 4000, 1234 etc.
+
+ Again, make sure to initialize using npm i. Once this is done you can run the following line to have your backend server running:
+ ```
+ npm run watch
+ ```
+
+ Last but not least, the client. The client will follow the same steps of create a .env, initalize, and using the start command. The .env file is as follows:
+
+ ```
+ REACT_APP_API_URL= *YOUR URL THAT THE SERVER IS RUNNING ON*
+ ```
+
+ If your server is running on port 4000, then you would set the above to "http://localhost:4000"
