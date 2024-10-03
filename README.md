@@ -78,3 +78,4 @@ If everything is set up properly, You should be all set! Be warned, most of the 
 ![image](https://github.com/user-attachments/assets/c45d2378-d413-4e8a-962e-d94019a472b6)
 
 
+Again, a lot of Quality of life has been neglected since the core features are still being developed, so expect issues, errors, and hiccups!
