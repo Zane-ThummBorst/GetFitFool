@@ -102,7 +102,7 @@ router.put("/UpdateScheduleRoutine", validationList(), async(req,res) =>{
     let daysList = []
     let days = Object.keys(schedule)
     days.forEach(day =>{
-        if(schedule[day].exercises){
+        if(schedule[day].exercises.length != 0){
             daysList.push(day)
             totalExercises += schedule[day].exercises.length
         }
@@ -151,7 +151,7 @@ router.put("/UpdateGeneralInfoRoutine",
             }) 
 })
 
-router.delete("/deleteRoutine",[ body('uuid').isString().trim().escape().exists()], async(req,res) =>{
+router.post("/deleteRoutine",[ body('uuid').isString().trim().escape().exists()], async(req,res) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -200,6 +200,8 @@ router.post("/cloneRoutine",
                 response._id = undefined;           
                 if(isPublic){
                     response.public = true;
+                }else{
+                    response.public = false;
                 }
 
                 let days = Object.keys(response.schedule)
@@ -207,7 +209,7 @@ router.post("/cloneRoutine",
                     if(response.schedule[day].exercises){
                         let exercises = response.schedule[day].exercises
                         for(let i = 0; i < exercises.length; i++){
-                            response.schedule[day].exercises[i].notes = []
+                            response.schedule[day].exercises[i].info.notes = []
                         }
                     }
                 })
@@ -289,17 +291,19 @@ router.post('/getPublicRoutines',[
     body("numberOfDays").isInt().optional(),
     body("totalExercisesRange").isArray().optional(),
     body("totalExercisesRange.*").isInt().optional(),
-    body("sortfield").isString().trim().escape().optional(),
+    body("sortField").isString().trim().escape().optional(),
     body("sortOrder").isInt().optional(),
     body("type").isArray().optional(),
-    body("type.*").isString().trim().escape().optional()
+    body("type.*").isString().trim().escape().optional(),
+    body("offset").isInt().optional(),
+
 ],
     async(req,res) =>{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.status(400).json({ errors: errors.array() });
         }
-        const {exerciseList, numberOfDays, totalExercisesRange, sortField, sortOrder, type} = req.body
+        const {exerciseList, numberOfDays, totalExercisesRange, sortField, sortOrder, type, offset} = req.body
         const pipeline = [{$match: {public: true}}]
 
         if(numberOfDays)
@@ -309,17 +313,18 @@ router.post('/getPublicRoutines',[
         if(type)
             pipeline.push({$match: {type: {$in: type}}})
 
+        // this is fucked
         if(exerciseList){
             pipeline.push( {
                 $match: {
                     $or: [
-                            {"schedule.Monday.exercises.name": {$in: exerciseList}},
-                            {"schedule.Tuesday.exercises.name":  {$in: exerciseList}},
-                            {"schedule.Wednesday.exercises.name":  {$in: exerciseList}},
-                            {"schedule.Thursday.exercises.name":  {$in: exerciseList}},
-                            {"schedule.Friday.exercises.name":  {$in: exerciseList}},
-                            {"schedule.Saturday.exercises.name":  {$in: exerciseList}},
-                            {"schedule.Sunday.exercises.name":  {$in: exerciseList}},
+                            {"schedule.Monday.exercises.info.name": {$in: exerciseList}},
+                            {"schedule.Tuesday.exercises.info.name":  {$in: exerciseList}},
+                            {"schedule.Wednesday.exercises.info.name":  {$in: exerciseList}},
+                            {"schedule.Thursday.exercises.info.name":  {$in: exerciseList}},
+                            {"schedule.Friday.exercises.info.name":  {$in: exerciseList}},
+                            {"schedule.Saturday.exercises.info.name":  {$in: exerciseList}},
+                            {"schedule.Sunday.exercises.info.name":  {$in: exerciseList}},
                         ]
 
                 }
@@ -327,17 +332,26 @@ router.post('/getPublicRoutines',[
         }
         if(sortField)
             pipeline.push({$sort: {[sortField] : sortOrder}})
+
+        pipeline.push({$skip: offset})
         pipeline.push({$limit: 20})
 
         try {
             const db = client.db('GetFit')
             const collection = db.collection(process.env.COLLECTION_URI)
             const result = await collection.aggregate(pipeline).toArray()
+            pipeline.pop()
+            pipeline.pop()
+            pipeline.push({$count: 'totalDocuments'})
+
+            const result2 = await collection.aggregate(pipeline).toArray()
+
             if(result.length == 0)
-                res.status(404).json("no results found")
+                res.status(200).json({publicRoutines: [], count: 0})
             else
-                res.status(200).json(result)
+                res.status(200).json({publicRoutines: result, count: result2[0].totalDocuments})
         } catch (error) {
+                console.log(error)
                 res.status(500).json('internal server error')
         }
 })

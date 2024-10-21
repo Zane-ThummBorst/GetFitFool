@@ -2,14 +2,19 @@ import axios from 'axios'
 import { useContext,useState } from 'react'
 import {TextField, Button, Paper} from '@mui/material'
 import CenteredLayout from './layouts/CenteredLayout'
+import { useNavigate } from 'react-router-dom'
+import { MyContext } from '../MyContext'
 
 const RegistrationForm = () =>{
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
 
+    const {login, setLogin} = useContext(MyContext)
+
     const [errors, setErrors] = useState({})
     
+    const navigate = useNavigate()
 
     const handleUsername = (event) =>{
         setUsername(event.target.value)
@@ -71,6 +76,9 @@ const RegistrationForm = () =>{
             })
             .then(response =>{
                 localStorage.setItem('jwt_token',response.data)
+                let loginStatus = login
+                setLogin(!loginStatus)
+                navigate('/Public Routines')
             })
             .catch(error =>{
                 alert("internal server error")

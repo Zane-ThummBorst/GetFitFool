@@ -110,7 +110,6 @@ router.post('/getManyExercises',
 
         try{
             const size = await collection.countDocuments(query.length > 0 ? {$and: query} : {});
-            console.log(size)
             const result = await collection.find(query.length > 0 ? {$and: query} : {}).limit(limit).skip(offset).toArray()
             res.json({size: size, result: result})
         }catch(e){

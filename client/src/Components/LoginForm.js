@@ -3,6 +3,7 @@ import { useContext,useState } from 'react'
 import {TextField, Button, Paper} from '@mui/material'
 import { MyContext } from '../MyContext'
 import CenteredLayout from './layouts/CenteredLayout'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () =>{
 
@@ -12,6 +13,9 @@ const LoginForm = () =>{
     const [errors, setErrors] = useState({})
 
     const {login, setLogin} = useContext(MyContext)
+
+
+    const navigate = useNavigate()
 
     const TextFieldStyle = {
         mt: 2
@@ -63,6 +67,7 @@ const LoginForm = () =>{
                 localStorage.setItem('jwt_token',response.data)
                 let loginStatus = login
                 setLogin(!loginStatus)
+                navigate('/Public Routines')
             })
             .catch(error =>{
                 alert("internal server error")
@@ -73,7 +78,7 @@ const LoginForm = () =>{
 
     return(
         <>
-            <CenteredLayout>
+            <CenteredLayout size={4}>
             <Paper sx={{display: 'flex', flexDirection:'column', p:1}}>
 
             <TextField sx={TextFieldStyle}

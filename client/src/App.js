@@ -8,10 +8,10 @@ import LoginForm from './Components/LoginForm';
 import UpdateUserForm from './Components/UpdateUserForm';
 import ExerciseSearch from './Components/ExerciseSearch';
 import NavBar from './Components/NavBar';
-import CreateRoutine from './Components/CreateRoutine';
-import PersonalRoutines from './Components/PersonalRoutines';
+import Routines from './Components/Routines';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import PublicRoutines from './Components/PublicRoutines';
 
 const darkTheme = createTheme({
   palette: {
@@ -74,13 +74,12 @@ function App() {
           <NavBar/>
 
           <Routes>
-              <Route index element={<ExerciseSearch />}/>
+              <Route path="Routine_Creation" element={<ExerciseSearch />}/>
               <Route path="Register" element={<RegistrationForm/>}/>
               <Route path = "Login" element={<LoginForm/>}/>
               <Route path = "UpdateInfo" element={<UpdateUserForm/>}/>
-              <Route path = "CreateRoutine" element={<CreateRoutine/>}/>
-              <Route path = "PersonalRoutine" element = {<PersonalRoutines/>}/>
-
+              <Route path="Routines" element={<Routines/>}/>
+              <Route path="Public Routines" element={<PublicRoutines/>}/>
           </Routes>
 
         </MyContext.Provider>

@@ -2,8 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import CenteredLayout from "./layouts/CenteredLayout"
 import { MyContext } from "../MyContext";
 import axios from "axios";
-import { Grid2, Box, Paper, Typography } from "@mui/material";
+import { Grid2, Box, Paper, Typography, Button, ButtonGroup } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "./ConfirmModal";
+import PublicModal from "./PublicModal";
 
 
 let typoStyle = {
@@ -11,22 +13,58 @@ let typoStyle = {
   }
   
   let typoStyle2 = {
-    width:'300px', 
+    width:'200px', 
   }
 
+const scrollStyle = {
+display: "flex",
+flexDirection: "column",
+borderRadius: '1em',
+p: 1,
+overflow: "auto",
+scrollbarWidth: "none", // Hide the scrollbar for firefox
+'&::-webkit-scrollbar': {
+    display: 'none', // Hide the scrollbar for WebKit browsers (Chrome, Safari, Edge, etc.)
+},
+'&-ms-overflow-style:': {
+    display: 'none', // Hide the scrollbar for IE
+},
+maxHeight: {
+    xs: '300px',
+    sm: '400px',
+    md: '500px',
+    lg: '600px',
+    xl: '700px',
+  },
+}
   
 
 const PersonalRoutines = () =>{
-    const [routines, setRoutines] = useState([])
-    const {userInfo, setCurRoutineUUID, setCurSechdule} = useContext(MyContext)
+    const {userInfo, curRoutineUUID, setCurRoutineUUID, setCurSechdule, routineIdList, setRoutineIdList, routines, setRoutines} = useContext(MyContext)
     const navigate = useNavigate();
+
+    const [open,setOpen] = useState(false)
+    const [open2, setOpen2] = useState(false)
+
+    const handleDelete = (event,routineId) =>{
+        event.stopPropagation();
+        setOpen(true)
+        setCurRoutineUUID(routineId)
+    }
+
+    const handlePublic = (event, routineId) =>{
+        event.stopPropagation();
+        setOpen2(true)
+        setCurRoutineUUID(routineId)   
+        console.log(routineId)
+    }
 
 
     useEffect(()=>{
         const getRoutines = async() =>{
             try{
                 let result = await axios.post(`${process.env.REACT_APP_API_URL}/routines/GetRoutines`,{
-                    routineUuids: userInfo.personal_routines
+                    routineUuids: routineIdList
                 })
                 setRoutines(result.data)
             }catch{
@@ -34,7 +72,7 @@ const PersonalRoutines = () =>{
             }
         }
         getRoutines()
-    }, [userInfo.personal_routines])
+    }, [routineIdList])
 
     const dayList = (routine) =>{
         let result = ''
@@ -46,32 +84,48 @@ const PersonalRoutines = () =>{
         }))
     }
 
+
+
     const navigateTo = (routineId, routineSchedule) =>{
-        console.log(routineSchedule)
         setCurRoutineUUID(routineId)
         setCurSechdule(routineSchedule)
-        navigate('/')
+        navigate('/Routine_Creation')
     }
 
-    return(
+    const handleBoxClick = (event, routine) => {
+        navigateTo(routine.uuid, routine.schedule);
+    };
+
+
+
+    return (
         <>
-        <CenteredLayout size={4}>
-            {routines == [] ? <p>Loading</p> : routines.map((routine) =>{
-                return(
-                    
-                    <Box onClick={() =>{ navigateTo(routine.uuid, routine.schedule)}}>
-                        <Paper sx={{ display:"flex", justifyContent:"space-between", padding: '1em', mt: 3}}>
+                {routines.length === 0 ? <p>Loading</p> : routines.map((routine) => (
+                   
+                        <Paper 
+                        key={routine.id}
+                        onClick={(event) => handleBoxClick(event, routine)}
+                        sx={{ display: "flex", justifyContent: "space-between", padding: '1em', mt: 3, alignItems: 'center' }}>
                             <Typography sx={typoStyle2}>{routine.name}</Typography>
                             <Typography sx={typoStyle}>{routine.totalExercises}</Typography>
-                            {routine.public ? <Typography sx={typoStyle}>public</Typography>  : <Typography sx={typoStyle}>private</Typography>}
-                            <Box sx={{display:'flex'}}>{dayList(routine)}</Box>
+                            {routine.public ? <Typography sx={typoStyle}>public</Typography> : <Typography sx={typoStyle}>private</Typography>}
+                            <Typography sx={typoStyle2}><Box sx={{display:'flex'}}>{dayList(routine)}</Box> </Typography>
+                            <Typography sx={typoStyle}>
+                                <ButtonGroup  size="small"  orientation="vertical">
+                                    <Button onClick={(event) =>handleDelete(event,routine.uuid)}>Delete</Button>
+                                    <Button onClick={(event) =>{handlePublic(event, routine.uuid)}}>public</Button>
+                                </ButtonGroup> 
+                            </Typography>
                         </Paper>
-                    </Box>
-                )
-            })}
-        </CenteredLayout>
+                ))}
+            <MyContext.Provider value={{ open, setOpen, curRoutineUUID, userInfo, routineIdList, setRoutineIdList }}>
+                <ConfirmModal message={curRoutineUUID} />
+            </MyContext.Provider>
+            <MyContext.Provider value={{ open2, setOpen2, curRoutineUUID, userInfo}}>
+                <PublicModal message={curRoutineUUID} />
+            </MyContext.Provider>
         </>
-    )
-}
+    );
+};
 
 export default PersonalRoutines;
